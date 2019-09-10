@@ -1,6 +1,8 @@
 from telegram.ext import Updater, CommandHandler, MessageHandler, Filters
 import logging
 import settings
+import ephem 
+from datetime import date
 
 logging.basicConfig(format='%(asctime)s - %(levelname)s - %(message)s',
                     level = logging.INFO,
@@ -17,6 +19,13 @@ def talk_to_me(update, context):
                 update.message.chat.id, update.message.text)
     update.message.reply_text(user_text)
 
+def planets(update, context):      
+    if  update.message.text == "Mars":
+        u = ephem.Uranus()
+        u.compute('1781/3/13')
+        rpl = ephem.constellation(u)
+        update.message.reply_text(rpl)
+
 def main():
 
     updater = Updater(settings.API_KEY, use_context = True)
@@ -26,6 +35,7 @@ def main():
     dp = updater.dispatcher
     dp.add_handler(CommandHandler('start', greet_user))
     dp.add_handler(MessageHandler(Filters.text, talk_to_me))
+    dp.add_handler(CommandHandler('planet', planets))
 
     updater.start_polling()
     updater.idle()
