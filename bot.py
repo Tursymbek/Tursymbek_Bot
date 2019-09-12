@@ -1,8 +1,8 @@
 from telegram.ext import Updater, CommandHandler, MessageHandler, Filters
 import logging
 import settings
-import ephem 
-from datetime import date
+import ephem
+from datetime import datetime 
 
 logging.basicConfig(format='%(asctime)s - %(levelname)s - %(message)s',
                     level = logging.INFO,
@@ -14,17 +14,20 @@ def greet_user(update, context):
     update.message.reply_text(text)
 
 def talk_to_me(update, context):
-    user_text = "Hello {}! You wrote: {}".format(update.message.chat.first_name, update.message.text)
+    user_text = "Hello {}! You wrote: {}. \nYou can find these planets: \n Mercury, \n Venus, \n Mars, \n Jupiter, \n Saturn, \n Uranus, \n Neptune, \n Pluto, \n Sun, \n Moon.".format(update.message.chat.first_name, update.message.text)
     logging.info("User: %s, Chat id: %s, Message: %s", update.message.chat.username, 
                 update.message.chat.id, update.message.text)
     update.message.reply_text(user_text)
 
 def planets(update, context):      
-    if  update.message.text == "Mars":
-        u = ephem.Uranus()
-        u.compute('1781/3/13')
-        rpl = ephem.constellation(u)
-        update.message.reply_text(rpl)
+    user_planet = update.message.text
+   
+    u = getattr(ephem, user_planet[1])
+    tm = datetime.now()
+    star_in = u(tm)
+    result = ephem.constellation(star_in)
+    rpl = str(result)
+    update.message.reply_text(" Your planet in {}".format(rpl))
 
 def main():
 
