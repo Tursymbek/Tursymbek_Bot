@@ -14,18 +14,22 @@ logging.basicConfig(format='%(asctime)s - %(levelname)s - %(message)s',
                     filename = 'bot.log')
 
 def greet_user(update, context):
-    text = '/start called'
+    text = 'Вызван /start. Напишите что-нибудь.'
     print (text)
     update.message.reply_text(text)
 
 def planets(update, context):      
     user_planet = update.message.text.split()
-   
-    u = getattr(ephem, user_planet[1])
-    tm = datetime.now()
-    star_in = u(tm)
-    result = ephem.constellation(star_in)
-    update.message.reply_text("Your planet in {}.".format(result))
+    try:   
+        u = getattr(ephem, user_planet[1])
+        
+        tm = datetime.now()
+        star_in = u(tm)
+        result = ephem.constellation(star_in)
+        
+        update.message.reply_text("Этот объект сейчас в созвездии {}.".format(result))
+    except:
+        update.message.reply_text("Планету под названием {} я не нашел. \nПопробуйте следующие: \nMercury, Venus, Mars, Jupiter, Saturn, Uranus, Neptune, Pluto, Sun, Moon. \nПисать нужно в таком порядке: /planet название планеты.".format(user_planet[1]))
 
 def send_cat_picture(update, context):
     cat_list = glob('image/cat*.jp*g')
@@ -34,7 +38,7 @@ def send_cat_picture(update, context):
     #bot.send_photo(chat_id=update.message.chat.id, photo = open(cat_pic, 'rb'))
 
 def talk_to_me(update, context):
-    user_text = "Hello {}! You wrote: {}. \nYou can find these planets: \n Mercury, \n Venus, \n Mars, \n Jupiter, \n Saturn, \n Uranus, \n Neptune, \n Pluto, \n Sun, \n Moon.".format(update.message.chat.first_name, update.message.text)
+    user_text = "Привет {}! Вы написали: {}, но я Вас не понимаю. Я умею делать две вещи: \n1. Оправлять фото котиков (для этого введите /cat). \n2. Писать в каком созвездии находится планета (для этого введите /planet название планеты). \nВы можете найти следующие планеты: \nMercury, Venus, Mars, Jupiter, Saturn, Uranus, Neptune, Pluto, Sun, Moon.".format(update.message.chat.first_name, update.message.text)
     logging.info("User: %s, Chat id: %s, Message: %s", update.message.chat.username, 
                 update.message.chat.id, update.message.text)
     update.message.reply_text(user_text)
