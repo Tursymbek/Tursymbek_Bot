@@ -7,6 +7,7 @@ Tursymbek_Bot  -  это бот для Telegram  созданный с цеью 
 ---------
 
 Создайте виртуальное окружение и активируйте его. Потом в виртуальном окружении выполните:
+
 .. code-block:: text
     pip install -r requirements.text
 
@@ -16,11 +17,13 @@ Tursymbek_Bot  -  это бот для Telegram  созданный с цеью 
 ---------
 
 Создайте файл settings.py и добавьте туда следующие настройки:
+
 .. code-block:: python
     API_KEY = "API ключ, который Вы получили у BotFather"
 
 Запуск
 ------
 В активированном виртуальном окружении выполнитеЖ
+
 .. code-block:: text
     bot.py
